@@ -6,10 +6,13 @@ import (
 
 	"ecommere.com/global_router"
 	"ecommere.com/handlers"
+	"ecommere.com/middleware"
 )
 
 func Serve() {
 	mux := http.NewServeMux() //router
+
+	mux.Handle("GET /route", middleware.Logger(http.HandlerFunc(handlers.Test)))
 
 	mux.Handle("GET /products", http.HandlerFunc(handlers.GetProducts))
 	mux.Handle("POST /products", http.HandlerFunc(handlers.CreateProduct)) //route
