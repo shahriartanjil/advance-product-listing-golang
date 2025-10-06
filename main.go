@@ -1,72 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"ecommere.com/cmd"
 )
 
 func main() {
-	mux := http.NewServeMux() //router
-
-	mux.Handle("GET /products", http.HandlerFunc(getProducts))
-	mux.Handle("POST /create-product", http.HandlerFunc(createProduct)) //route
-
-	fmt.Println("Server running on :3001")
-
-	globRouter := globalRouter(mux)
-
-	err := http.ListenAndServe(":3001", globRouter) // "failed to start the server"
-	if err != nil {
-		fmt.Println("Error starting the server", err)
-	}
-}
-
-func init() {
-	prd1 := Product{
-		ID:          1,
-		Title:       "Orange",
-		Description: "Orange is red",
-		Price:       120,
-		ImgUrl:      "https://upload.wikimedia.org/wikipedia/commons/e/e3/Oranges_-_whole-halved-segment.jpg",
-	}
-
-	prd2 := Product{
-		ID:          2,
-		Title:       "Apple",
-		Description: "Apple is Green",
-		Price:       120,
-		ImgUrl:      "https://static.vecteezy.com/system/resources/thumbnails/012/086/172/small_2x/green-apple-with-green-leaf-isolated-on-white-background-vector.jpg",
-	}
-
-	prd3 := Product{
-		ID:          3,
-		Title:       "Banana",
-		Description: "Banana is Yellow",
-		Price:       60,
-		ImgUrl:      "https://www.bobtailfruit.co.uk/media/mageplaza/blog/post/4/2/42e9as7nataai4a6jcufwg.jpeg",
-	}
-
-	prd4 := Product{
-		ID:          4,
-		Title:       "Watermelon",
-		Description: "Watermelon is Sweet",
-		Price:       300,
-		ImgUrl:      "https://media.post.rvohealth.io/wp-content/uploads/sites/3/2025/01/benefits-watermelon-GettyImages-1331129269-Thumb.jpg",
-	}
-
-	prd5 := Product{
-		ID:          4,
-		Title:       "Mango",
-		Description: "MANGO is my favorute ",
-		Price:       300,
-		ImgUrl:      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf0J-W_xQ8nJ2T7SeBHdkUc68NZIE0Zb4woQ&s",
-	}
-
-	productList = append(productList, prd1)
-	productList = append(productList, prd2)
-	productList = append(productList, prd3)
-	productList = append(productList, prd4)
-	productList = append(productList, prd5)
+	cmd.Serve()
 }
 
 // func corsMiddleware(next http.Handler) http.Handler {
