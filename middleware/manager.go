@@ -13,18 +13,29 @@ func NewManager() *Manager {
 		globalMiddlewares: make([]Middleware, 0),
 	}
 }
-func (mngr *Manager) With(middlewares ...Middleware) Middleware {
-	return func(next http.Handler) http.Handler {
-		n := next
 
-		// middlewares = [example, logger] // idx = example - 0, logger -1
-		//middleware.Logger(http.HandlerFunc(handlers.GetProducts))
+func (mngr *Manager) Use(Middlewares ...Middleware) { /// builder pattern bola hoy
+	mngr.globalMiddlewares = append(mngr.globalMiddlewares, Middlewares...)
 
-		for i := len(middlewares) - 1; i >= 0; i-- {
-			middleware := middlewares[i]
-			n = middleware(n)
-		}
+}
 
-		return n
+func (mngr *Manager) With(next http.Handler, middlewares ...Middleware) http.Handler {
+
+	n := next
+
+	//middlewares = [ logger, example]
+	// n = middleware.Logger(http.HandlerFunc(handlers.CreateProduct))
+	//middlewares = [ logger, example]
+	//n = middleware.Logger(http.HandlerFunc(handlers.CreateProduct)))
+
+	for _, middleware := range middlewares {
+		n = middleware(n)
 	}
+
+	//globalMiddleware
+	for _, globalMiddleware := range mngr.globalMiddlewares {
+		n = globalMiddleware(n)
+	}
+
+	return n
 }
