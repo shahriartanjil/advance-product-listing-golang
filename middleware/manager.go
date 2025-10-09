@@ -5,7 +5,7 @@ import "net/http"
 type Middleware func(http.Handler) http.Handler
 
 type Manager struct {
-	globalMiddlewares []Middleware
+	globalMiddlewares []Middleware //Logger, Example,CorsWithPreflight
 }
 
 func NewManager() *Manager {
@@ -21,21 +21,23 @@ func (mngr *Manager) Use(Middlewares ...Middleware) { /// builder pattern bola h
 
 func (mngr *Manager) With(next http.Handler, middlewares ...Middleware) http.Handler {
 
-	n := next
-
-	//middlewares = [ logger, example]
-	// n = middleware.Logger(http.HandlerFunc(handlers.CreateProduct))
-	//middlewares = [ logger, example]
-	//n = middleware.Logger(http.HandlerFunc(handlers.CreateProduct)))
+	h := next
 
 	for _, middleware := range middlewares {
-		n = middleware(n)
+		h = middleware(h)
+	}
+	return h
+}
+
+func (mngr *Manager) WrapMux(handler http.Handler) http.Handler {
+
+	h := handler
+
+	//[CorsWithPreflight, Example,Logger]
+	// h= logger(example(corsWithPreflight(mux)))
+	for _, middleware := range mngr.globalMiddlewares {
+		h = middleware(h)
 	}
 
-	//globalMiddleware
-	for _, globalMiddleware := range mngr.globalMiddlewares {
-		n = globalMiddleware(n)
-	}
-
-	return n
+	return h
 }
