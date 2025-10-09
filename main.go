@@ -1,11 +1,19 @@
 package main
 
 import (
-	"ecommere.com/cmd"
+	"fmt"
+
+	"ecommere.com/config"
 )
 
 func main() {
-	cmd.Serve()
+	cnf := config.GetConfig()
+
+	fmt.Println(cnf.Version)
+	fmt.Println(cnf.ServiceName)
+	fmt.Println(cnf.HttpPort)
+
+	// cmd.Serve()
 }
 
 // func corsMiddleware(next http.Handler) http.Handler {
