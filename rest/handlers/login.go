@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"ecommere.com/config"
 	"ecommere.com/database"
 	"ecommere.com/utility"
 )
@@ -30,6 +31,19 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utility.SendData(w, usr, http.StatusCreated)
+	cnf := config.GetConfig()
+
+	accessToken, err := utility.CreateJwt(cnf.JwtSecretKey, utility.Payload{ //jwt secret key is called access token
+		Sub:       usr.ID,
+		FirstName: usr.FirstName,
+		LastName:  usr.LastName,
+		Email:     usr.Email,
+	})
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	utility.SendData(w, accessToken, http.StatusCreated)
 
 }

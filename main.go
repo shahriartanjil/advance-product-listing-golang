@@ -1,22 +1,21 @@
 package main
 
 import (
-	"fmt"
-
-	"ecommere.com/utility"
+	"ecommere.com/cmd"
 )
 
 // "crypto/sha256"
 // "fmt"
 // "fmt"
-// "ecommere.com/cmd"
+
 // "encoding/base64"
 
 // import
 
 func main() {
+	// fmt.Println("server start")
 
-	// cmd.Serve()
+	cmd.Serve()
 
 	// var s string
 
@@ -56,18 +55,18 @@ func main() {
 	// text := h.Sum(nil)
 
 	// fmt.Println(text)
-	jwt, err := utility.CreateJwt("my-secret", utility.Payload{
-		Sub:         20,
-		FirstName:   "Shahriar",
-		LastName:    "Hasan",
-		Email:       "shahriart29@gmail.com",
-		IsShopOwner: false,
-	})
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	// jwt, err := utility.CreateJwt("my-secret", utility.Payload{
+	// 	Sub:         20,
+	// 	FirstName:   "Shahriar",
+	// 	LastName:    "Hasan",
+	// 	Email:       "shahriart29@gmail.com",
+	// 	IsShopOwner: false,
+	// })
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
 
-	fmt.Println(jwt)
+	// fmt.Println(jwt)
 
 }

@@ -9,7 +9,14 @@ import (
 	"ecommere.com/utility"
 )
 
-func CreateProduct(w http.ResponseWriter, r *http.Request) {
+func CreateProduct(w http.ResponseWriter, r *http.Request) { 
+	// parse jwt
+	// parse header and payload or claims
+	//hmac-sha-256 algo -> hash hmac(header, payload, secret key)
+	// parse signature part from the jwt
+	//if the signature and hash is same => forward to create products
+	//otherwise 401 status code with Unauthorized
+
 	var newProduct database.Product
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&newProduct)

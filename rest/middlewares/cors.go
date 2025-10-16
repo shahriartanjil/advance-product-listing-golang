@@ -11,6 +11,8 @@ func Cors(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Shahriar")
 		w.Header().Set("Content-Type", "application/json")
 
+		next.ServeHTTP(w, r)
+
 	})
 
 }

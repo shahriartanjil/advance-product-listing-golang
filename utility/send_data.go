@@ -5,14 +5,25 @@ import (
 	"net/http"
 )
 
+// SendData sends JSON response with given status code and data
 func SendData(w http.ResponseWriter, data interface{}, statusCode int) {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
-	encoder := json.NewEncoder(w)
-	encoder.Encode(data)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		http.Error(w, `{"error":"failed to encode response"}`, http.StatusInternalServerError)
+	}
 }
 
-func SendError(w http.ResponseWriter, statusCode int, mgs string) {
+// SendError sends JSON error message with given status code
+func SendError(w http.ResponseWriter, statusCode int, msg string) {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
-	encoder := json.NewEncoder(w)
-	encoder.Encode(mgs)
+
+	resp := map[string]string{
+		"error": msg,
+	}
+
+	if err := json.NewEncoder(w).Encode(resp); err != nil {
+		http.Error(w, `{"error":"failed to encode error response"}`, http.StatusInternalServerError)
+	}
 }
