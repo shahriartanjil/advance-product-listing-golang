@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strings"
 
+	"ecommere.com/config"
 	"ecommere.com/utility"
 )
 
@@ -25,6 +26,7 @@ func GetUserFromContext(ctx context.Context) (utility.Payload, bool) {
 // Auth verifies a Bearer JWT created by utility.CreateJwt and injects the user payload into context.
 // Example: mux.Handle("GET /products", Auth(secret)(http.HandlerFunc(handlers.GetProducts)))
 func Auth(secret string) func(http.Handler) http.Handler {
+
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -72,4 +74,10 @@ func Auth(secret string) func(http.Handler) http.Handler {
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}
+}
+
+// AuthFromConfig creates the Auth middleware using the secret in config.
+func AuthFromConfig() func(http.Handler) http.Handler {
+	secret := config.GetConfig().JwtSecretKey
+	return Auth(secret) // your existing Auth(secret) middleware
 }

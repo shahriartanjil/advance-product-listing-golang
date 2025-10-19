@@ -17,7 +17,6 @@ func Start(cnf config.Config) {
 		middleware.Preflight,
 		middleware.Cors,
 		middleware.Logger,
-		middleware.Auth(config.GetConfig().JwtSecretKey)
 	)
 
 	mux := http.NewServeMux()

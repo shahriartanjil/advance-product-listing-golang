@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -9,13 +10,7 @@ import (
 	"ecommere.com/utility"
 )
 
-func CreateProduct(w http.ResponseWriter, r *http.Request) { 
-	// parse jwt
-	// parse header and payload or claims
-	//hmac-sha-256 algo -> hash hmac(header, payload, secret key)
-	// parse signature part from the jwt
-	//if the signature and hash is same => forward to create products
-	//otherwise 401 status code with Unauthorized
+func CreateProduct(w http.ResponseWriter, r *http.Request) {
 
 	var newProduct database.Product
 	decoder := json.NewDecoder(r.Body)
@@ -30,4 +25,8 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 
 	utility.SendData(w, createdProduct, 201)
 
+}
+
+func base64UrlEncode(data []byte) string {
+	return base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString(data)
 }

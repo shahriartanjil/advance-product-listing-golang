@@ -8,6 +8,7 @@ import (
 )
 
 func intiRoutes(mux *http.ServeMux, manager *middleware.Manager) {
+	// auth := middleware.AuthFromConfig()
 
 	mux.Handle("GET /products",
 		manager.With(
@@ -17,6 +18,7 @@ func intiRoutes(mux *http.ServeMux, manager *middleware.Manager) {
 	mux.Handle("POST /products",
 		manager.With(
 			http.HandlerFunc(handlers.CreateProduct),
+			middleware.AuthenticateJwt,
 		))
 
 	mux.Handle("GET /products/{Id}",
@@ -27,11 +29,13 @@ func intiRoutes(mux *http.ServeMux, manager *middleware.Manager) {
 	mux.Handle("PUT /products/{Id}",
 		manager.With(
 			http.HandlerFunc(handlers.UpdateProducts),
+			middleware.AuthenticateJwt,
 		))
 
 	mux.Handle("DELETE /products/{Id}",
 		manager.With(
 			http.HandlerFunc(handlers.DeleteProduct),
+			middleware.AuthenticateJwt,
 		))
 
 	mux.Handle("POST /users",
