@@ -1,4 +1,4 @@
-package handlers
+package product
 
 import (
 	"net/http"
@@ -8,7 +8,7 @@ import (
 	"ecommere.com/utility"
 )
 
-func GetProduct(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
 	productID := r.PathValue("Id")
 
 	pId, err := strconv.Atoi(productID)
@@ -16,11 +16,7 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Please give me a valid product id", 400)
 		return
 	}
-	product := database.Get(pId)
-	if product == nil {
-		utility.SendError(w, 404, "Product not found")
-		return
-	}
+	database.Delete(pId)
 
-	utility.SendData(w, product, 200)
+	utility.SendData(w, "Successfully deleted product", 201)
 }
