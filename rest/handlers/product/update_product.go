@@ -6,15 +6,22 @@ import (
 	"net/http"
 	"strconv"
 
-	"ecommere.com/database"
 	"ecommere.com/utility"
 )
+
+type ReqUpdateProduct struct {
+	Title       string  `json:"title"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	ImgUrl      string  `json:"imageUrl"`
+}
 
 func (h *Handler) UpdateProducts(w http.ResponseWriter, r *http.Request) {
 	productID := r.PathValue("Id")
 
 	pId, err := strconv.Atoi(productID)
 	if err != nil {
+
 		http.Error(w, "Please give me a valid product id", 400)
 		return
 	}

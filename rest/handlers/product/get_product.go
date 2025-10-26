@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"ecommere.com/database"
 	"ecommere.com/utility"
 )
 
@@ -13,14 +12,18 @@ func (h *Handler) GetProduct(w http.ResponseWriter, r *http.Request) {
 
 	pId, err := strconv.Atoi(productID)
 	if err != nil {
-		http.Error(w, "Please give me a valid product id", 400)
+		utility.SendError(w, http.StatusBadRequest, "Invalid request body")
 		return
 	}
-	product := database.Get(pId)
+	product, err := h.productRepo.Get(pId)
+	if err != nil {
+		utility.SendError(w, http.StatusInternalServerError, "Internal server error")
+		return
+	}
 	if product == nil {
-		utility.SendError(w, 404, "Product not found")
+		utility.SendError(w, http.StatusNotFound, "Product not found")
 		return
 	}
 
-	utility.SendData(w, product, 200)
+	utility.SendData(w, http.StatusOK, product)
 }

@@ -12,14 +12,14 @@ import (
 func Serve() {
 	cnf := config.GetConfig()
 
-	middlewares := middleware.NewMiddlewares(&cnf)
+	middlewares := middleware.NewMiddlewares(cnf)
 
 	productHandler := product.NewHandler(middlewares)
 	userHandler := user.NewHandler()
 	reviewHandler := review.NewHandler()
 
 	server := rest.NewServer(
-		cnf,
+		*cnf,
 		productHandler,
 		userHandler,
 		reviewHandler,

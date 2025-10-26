@@ -3,12 +3,16 @@ package product
 import (
 	"net/http"
 
-	"ecommere.com/database"
 	"ecommere.com/utility"
 )
 
 func (h *Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
-	// fmt.Println("hello")
-	utility.SendData(w, database.List(), 200)
+	productList, err := h.productRepo.List()
+	if err != nil {
+		utility.SendError(w, http.StatusInternalServerError, "Internal server error")
+		return
+	}
+
+	utility.SendData(w, http.StatusOK, productList)
 	// utility.SendData(w, map[string]string{"message": "Success"}, http.StatusOK)
 }
