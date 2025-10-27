@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"ecommere.com/config"
+	"ecommere.com/repo"
 	"ecommere.com/rest"
 	"ecommere.com/rest/handlers/product"
-	"ecommere.com/rest/handlers/review"
 	"ecommere.com/rest/handlers/user"
 	middleware "ecommere.com/rest/middlewares"
 )
@@ -14,15 +14,16 @@ func Serve() {
 
 	middlewares := middleware.NewMiddlewares(cnf)
 
-	productHandler := product.NewHandler(middlewares)
-	userHandler := user.NewHandler()
-	reviewHandler := review.NewHandler()
+	productRepo := repo.NewProductRepo()
+	userRepo := repo.NewUserRepo()
+
+	productHandler := product.NewHandler(middlewares, productRepo)
+	userHandler := user.NewHandler(cnf, userRepo)
 
 	server := rest.NewServer(
 		*cnf,
 		productHandler,
 		userHandler,
-		reviewHandler,
 	)
 	server.Start()
 

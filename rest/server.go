@@ -8,7 +8,6 @@ import (
 
 	"ecommere.com/config"
 	"ecommere.com/rest/handlers/product"
-	"ecommere.com/rest/handlers/review"
 	"ecommere.com/rest/handlers/user"
 	middleware "ecommere.com/rest/middlewares"
 )
@@ -17,15 +16,13 @@ type Server struct {
 	cnf            config.Config
 	productHandler *product.Handler
 	userHandler    *user.Handler
-	reviewHandler  *review.Handler
 }
 
-func NewServer(cnf config.Config, productHandler *product.Handler, userHandler *user.Handler, reviewHandler *review.Handler) *Server {
+func NewServer(cnf config.Config, productHandler *product.Handler, userHandler *user.Handler) *Server {
 	return &Server{
 		cnf:            cnf,
 		productHandler: productHandler,
 		userHandler:    userHandler,
-		reviewHandler:  reviewHandler,
 	}
 }
 
@@ -44,7 +41,6 @@ func (server *Server) Start() {
 	// Register routes
 	server.productHandler.RegisterRoutes(mux, manager)
 	server.userHandler.RegisterRoutes(mux, manager)
-	server.reviewHandler.RegisterRoutes(mux, manager)
 
 	addr := ":" + strconv.Itoa(server.cnf.HttpPort)
 	fmt.Println("✅ Server running on port", server.cnf.HttpPort)

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"ecommere.com/repo"
 	"ecommere.com/utility"
 )
 
@@ -16,28 +17,34 @@ type ReqUpdateProduct struct {
 	ImgUrl      string  `json:"imageUrl"`
 }
 
-func (h *Handler) UpdateProducts(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ReqUpdateProduct(w http.ResponseWriter, r *http.Request) {
 	productID := r.PathValue("Id")
 
 	pId, err := strconv.Atoi(productID)
 	if err != nil {
-
-		http.Error(w, "Please give me a valid product id", 400)
+		utility.SendError(w, http.StatusBadRequest, "Invalid Product ID")
 		return
 	}
 
-	var newProduct database.Product
+	var req ReqUpdateProduct
 	decoder := json.NewDecoder(r.Body)
-	err = decoder.Decode(&newProduct)
+	err = decoder.Decode(&req)
 	if err != nil {
 		fmt.Println(err)
-		http.Error(w, "please give me valid json", 400)
+		utility.SendError(w, http.StatusBadRequest, "Invalid request body")
 		return
 	}
 
-	newProduct.ID = pId
+	_, err = h.productRepo.Update(repo.Product{
+		ID:          pId,
+		Title:       req.Title,
+		Description: req.Description,
+		Price:       req.Price,
+		ImgUrl:      req.ImgUrl,
+	})
+	if err != nil {
+		utility.SendError(w, http.StatusInternalServerError, "Internal server error")
+	}
 
-	database.Update(newProduct)
-
-	utility.SendData(w, "Successfully updated product", 201)
+	utility.SendData(w, http.StatusOK, "Successfully updated product")
 }

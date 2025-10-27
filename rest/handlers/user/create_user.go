@@ -5,22 +5,40 @@ import (
 	"fmt"
 	"net/http"
 
-	"ecommere.com/database"
+	"ecommere.com/repo"
 	"ecommere.com/utility"
 )
 
+type ReqCreateUser struct {
+	FirstName   string `json:"first_name"`
+	LastName    string `json:"last_name"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
+	IsShopOwner bool   `json:"is_shop_owner"`
+}
+
 func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
-	var newUser database.User
+	var req ReqCreateUser
 	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&newUser)
+	err := decoder.Decode(&req)
 	if err != nil {
 		fmt.Println(err)
-		http.Error(w, "Invalid request Data", http.StatusBadRequest)
+		utility.SendError(w, http.StatusBadRequest, "Invalid request Data")
 		return
 	}
 
-	createdUser := newUser.Store()
+	usr, err := h.userRepo.Create(repo.User{
+		FirstName:   req.FirstName,
+		LastName:    req.LastName,
+		Email:       req.Email,
+		Password:    req.Password,
+		IsShopOwner: req.IsShopOwner,
+	})
+	if err != nil {
+		utility.SendError(w, http.StatusInternalServerError, "Internal server error")
+		return
+	}
 
-	utility.SendData(w, createdUser, http.StatusCreated)
+	utility.SendData(w, http.StatusCreated, usr)
 
 }
