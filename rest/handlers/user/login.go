@@ -28,6 +28,11 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if usr == nil {
+		utility.SendError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	accessToken, err := utility.CreateJwt(h.cnf.JwtSecretKey, utility.Payload{ //jwt secret key is called access token
 		Sub:       usr.ID,
 		FirstName: usr.FirstName,

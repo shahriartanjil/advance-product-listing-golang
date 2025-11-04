@@ -95,7 +95,7 @@ func loadConfig() {
 
 	dbPass := os.Getenv("DB_PASSWORD")
 	if dbPass == "" {
-		fmt.Println("DB Password  is required")
+		fmt.Println("DB Password is required")
 		os.Exit(1)
 	}
 
