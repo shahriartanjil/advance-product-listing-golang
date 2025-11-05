@@ -65,13 +65,13 @@ func loadConfig() {
 
 	dbHost := os.Getenv("DB_HOST")
 	if dbHost == "" {
-		fmt.Println("Host is required")
+		fmt.Println("db Host is required")
 		os.Exit(1)
 	}
 
 	dbPort := os.Getenv("DB_PORT")
 	if dbPort == "" {
-		fmt.Println("Port must be number")
+		fmt.Println("db Port must be number")
 		os.Exit(1)
 	}
 
@@ -83,13 +83,13 @@ func loadConfig() {
 
 	dbName := os.Getenv("DB_NAME")
 	if dbName == "" {
-		fmt.Println("Name is required")
+		fmt.Println("db Name is required")
 		os.Exit(1)
 	}
 
 	dbUser := os.Getenv("DB_USER")
 	if dbUser == "" {
-		fmt.Println("User is required")
+		fmt.Println("db User is required")
 		os.Exit(1)
 	}
 

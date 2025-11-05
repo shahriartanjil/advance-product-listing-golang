@@ -3,7 +3,7 @@ CREATE TABLE products (
     title VARCHAR(255),
     description TEXT,
     price DOUBLE PRECISION NOT NULL,
-    ing_url TEXt,
+    img_url TEXT,
 	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP 
 );

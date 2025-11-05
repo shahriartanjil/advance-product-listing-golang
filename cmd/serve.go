@@ -16,7 +16,7 @@ import (
 func Serve() {
 	cnf := config.GetConfig()
 
-	// fmt.Printf("%+v", cnf.DB)
+	fmt.Printf("%+v", cnf.DB)
 
 	dbCon, err := db.NewConnection(cnf.DB)
 	if err != nil {
@@ -24,11 +24,11 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	err = db.MigrateDB(dbCon, "./migrations")
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	// err = db.MigrateDB(dbCon, "./migrations")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
+	// }
 
 	productRepo := repo.NewProductRepo(dbCon)
 	userRepo := repo.NewUserRepo(dbCon)

@@ -24,6 +24,11 @@ func GetConnectionString(cnf *config.DBConfig) string {
 	return connString
 }
 
+// func GetConnectionString(cnf config.DBConfig) string {
+
+// 	return "user=postgres password=123456789 host=localhost port=5432 dbname=ecommerce sslmode=disable"
+// }
+
 func NewConnection(cnf *config.DBConfig) (*sqlx.DB, error) {
 	dbSource := GetConnectionString(cnf)
 	dbCon, err := sqlx.Connect("postgres", dbSource)

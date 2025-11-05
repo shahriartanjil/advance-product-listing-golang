@@ -11,7 +11,7 @@ type Product struct {
 	Title       string  `json:"title" db:"title"`
 	Description string  `json:"description" db:"description"`
 	Price       float64 `json:"price" db:"price"`
-	ImgUrl      string  `json:"imageUrl" db:"ing_url"`
+	ImgUrl      string  `json:"imageUrl" db:"img_url"`
 }
 
 type ProductRepo interface {
@@ -40,7 +40,7 @@ func (r *productRepo) Create(p Product) (*Product, error) {
 		title,
 		description,
 		price,
-		ing_url
+		img_url
 	) VALUES (
 		$1,
 		$2,
@@ -66,7 +66,7 @@ func (r *productRepo) Get(id int) (*Product, error) {
 	  title,
 	   description,
 	    price,
-		 ing_url
+		 img_url
 		  from products
 		  where id = $1
 		  `
@@ -90,7 +90,7 @@ func (r *productRepo) List() ([]*Product, error) {
 	  title,
 	   description,
 	    price,
-		 ing_url
+		 img_url
 		  from products
 		  `
 	err := r.db.Select(&prdList, query)
@@ -100,25 +100,40 @@ func (r *productRepo) List() ([]*Product, error) {
 	return prdList, nil
 }
 
+// func (r *productRepo) Update(p Product) (*Product, error) {
+// 	query := `
+// 	UPDATE products
+// 	SET title=$1, description=$2, price=$3, img_url=$4
+// 	WHERE id = $5
+// 	`
+// 	result, err := r.db.Exec(query, p.Title, p.Description, p.Price, p.ImgUrl, p.ID)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	rowsAffected, err := result.RowsAffected()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	if rowsAffected == 0 {
+
+// 		return nil, sql.ErrNoRows
+// 	}
+
+// 	return &p, nil
+// }
+
 func (r *productRepo) Update(p Product) (*Product, error) {
 	query := `
 	UPDATE products
-	SET title=$1, description=$2, price=$3, ing_url=$4 
+	SET title=$1, description=$2, price=$3, img_url=$4 
 	WHERE id = $5
 	`
-	result, err := r.db.Exec(query, p.Title, p.Description, p.Price, p.ImgUrl, p.ID)
+	row := r.db.QueryRow(query, p.Title, p.Description, p.Price, p.ImgUrl, p.ID)
+	err := row.Err()
 	if err != nil {
 		return nil, err
-	}
-
-	rowsAffected, err := result.RowsAffected()
-	if err != nil {
-		return nil, err
-	}
-
-	if rowsAffected == 0 {
-
-		return nil, sql.ErrNoRows
 	}
 
 	return &p, nil

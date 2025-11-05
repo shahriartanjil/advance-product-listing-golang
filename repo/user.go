@@ -25,6 +25,7 @@ type UserRepo interface {
 }
 
 type userRepo struct {
+	// db *sqlx.DB
 	db *sqlx.DB
 }
 
@@ -59,7 +60,7 @@ func (r *userRepo) Create(user User) (*User, error) {
 		fmt.Println(err)
 		return nil, err
 	}
-	defer rows.Close()
+	// defer rows.Close()
 
 	if rows.Next() {
 		rows.Scan(&userID)
