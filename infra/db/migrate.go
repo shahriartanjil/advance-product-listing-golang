@@ -13,7 +13,7 @@ func MigrateDB(db *sqlx.DB, dir string) error {
 		Dir: dir,
 	}
 
-	_, err := migrate.Exec(db.DB, "postgress", migrations, migrate.Up)
+	_, err := migrate.Exec(db.DB, "postgres", migrations, migrate.Up)
 	if err != nil {
 		return err
 	}
