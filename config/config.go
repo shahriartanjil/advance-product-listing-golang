@@ -45,7 +45,7 @@ func loadConfig() {
 		fmt.Println("Service name is required")
 		os.Exit(1)
 	}
-	httpPort := os.Getenv("HTTO_PORT")
+	httpPort := os.Getenv("HTTP_PORT")
 	if httpPort == "" {
 		fmt.Println("Http port is required")
 		os.Exit(1)
