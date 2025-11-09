@@ -8,9 +8,10 @@ import (
 	"ecommere.com/infra/db"
 	"ecommere.com/repo"
 	"ecommere.com/rest"
-	"ecommere.com/rest/handlers/product"
-	"ecommere.com/rest/handlers/user"
+	prdHandler "ecommere.com/rest/handlers/product"
+	usrHandler "ecommere.com/rest/handlers/user"
 	middleware "ecommere.com/rest/middlewares"
+	"ecommere.com/user"
 )
 
 func Serve() {
@@ -30,13 +31,17 @@ func Serve() {
 		os.Exit(1)
 	}
 
+	// repos
 	productRepo := repo.NewProductRepo(dbCon)
 	userRepo := repo.NewUserRepo(dbCon)
 
+	// domains
+	usrSvc := user.NewService(userRepo)
+
 	middlewares := middleware.NewMiddlewares(cnf)
 
-	productHandler := product.NewHandler(middlewares, productRepo)
-	userHandler := user.NewHandler(cnf, userRepo)
+	productHandler := prdHandler.NewHandler(middlewares, productRepo)
+	userHandler := usrHandler.NewHandler(cnf, usrSvc)
 
 	server := rest.NewServer(
 		*cnf,
