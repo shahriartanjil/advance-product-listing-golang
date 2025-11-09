@@ -6,6 +6,7 @@ import (
 
 	"ecommere.com/config"
 	"ecommere.com/infra/db"
+	"ecommere.com/product"
 	"ecommere.com/repo"
 	"ecommere.com/rest"
 	prdHandler "ecommere.com/rest/handlers/product"
@@ -37,10 +38,12 @@ func Serve() {
 
 	// domains
 	usrSvc := user.NewService(userRepo)
+	prdctSvc := product.NewService(productRepo)
 
 	middlewares := middleware.NewMiddlewares(cnf)
 
-	productHandler := prdHandler.NewHandler(middlewares, productRepo)
+	// handlers
+	productHandler := prdHandler.NewHandler(middlewares, prdctSvc)
 	userHandler := usrHandler.NewHandler(cnf, usrSvc)
 
 	server := rest.NewServer(

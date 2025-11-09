@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"ecommere.com/repo"
+	"ecommere.com/domain"
 	"ecommere.com/utility"
 )
 
@@ -35,7 +35,7 @@ func (h *Handler) ReqUpdateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = h.productRepo.Update(repo.Product{
+	_, err = h.svc.Update(domain.Product{
 		ID:          pId,
 		Title:       req.Title,
 		Description: req.Description,
