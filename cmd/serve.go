@@ -28,7 +28,7 @@ func Serve() {
 
 	err = db.MigrateDB(dbCon, "./migrations")
 	if err != nil {
-		fmt.Println("❌ Migration failed:", err)
+		fmt.Println("Migration failed:", err)
 		os.Exit(1)
 	}
 
